@@ -23,16 +23,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	// TODO: These assume colours and dogs exist
-	colour := perms["colours"][ran(len(perms["colours"]))]
-	dog := perms["dogs"][ran(len(perms["dogs"]))]
+	var name []string
 
-	fmt.Printf("%s-%s\n", colour, dog)
+	for t := range perms {
+		thing := perms[t][ran(len(perms[t]))]
+		name = append(name, thing)
+
+	}
+	fmt.Println(strings.Join(name, "-"))
 }
 
 // ran picks a random positive int from 0 to max
 func ran(max int) int {
-	r := rand.New(rand.NewSource(time.Now().Unix()))
+	r := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
 	return r.Intn(max)
 }
 
