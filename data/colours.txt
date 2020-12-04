@@ -29,9 +29,6 @@ auburn
 aureolin
 avocado
 azure
-b'dazzled
-baby
-baker-miller
 banana
 barbie
 barn
@@ -147,7 +144,6 @@ cyber
 cyclamen
 dark
 dartmouth
-davy's
 deep
 denim
 desert
@@ -221,7 +217,6 @@ heliotrope
 hollywood
 honeydew
 honolulu
-hooker's
 hot
 hunter
 iceberg
@@ -358,7 +353,6 @@ parchment
 paris
 pastel
 patriarch
-payne's
 peach
 pear
 pearly
@@ -401,14 +395,7 @@ raisin
 rajah
 raspberry
 raw
-razzle
-razzmatazz
-razzmic
-rebecca
 red
-red-orange
-red-purple
-red-violet
 redwood
 resolution
 rhythm
@@ -445,7 +432,6 @@ satin
 scarlet
 schauss
 school
-screamin'
 sea
 seal
 seashell
@@ -533,8 +519,6 @@ verdigris
 vermilion
 veronica
 violet
-violet-blue
-violet-red
 viridian
 vivid
 volt
@@ -552,7 +536,7 @@ xanadu
 xanthic
 yale
 yellow
-yellow-green
+yellowgreen
 yinmn
 zaffre
 zomp

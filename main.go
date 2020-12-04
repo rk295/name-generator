@@ -1,20 +1,19 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"math/rand"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
-const (
-	coloursFile = "colours.txt"
-)
+type permutations map[string][]string
 
-type permutations struct {
-	colours []string
-}
+const (
+	dataDir = "data"
+)
 
 func main() {
 
@@ -24,45 +23,44 @@ func main() {
 		os.Exit(1)
 	}
 
-	for _, c := range perms.colours {
-		fmt.Println(c)
-	}
+	// TODO: These assume colours and dogs exist
+	colour := perms["colours"][ran(len(perms["colours"]))]
+	dog := perms["dogs"][ran(len(perms["dogs"]))]
 
-	entry := ran(len(perms.colours))
-	fmt.Println("Random selection:", perms.colours[entry])
-
+	fmt.Printf("%s-%s\n", colour, dog)
 }
 
-func ran(length int) int {
-	s := rand.NewSource(time.Now().Unix())
-	r := rand.New(s) // initialize local pseudorandom generator
-	return r.Intn(length)
+// ran picks a random positive int from 0 to max
+func ran(max int) int {
+	r := rand.New(rand.NewSource(time.Now().Unix()))
+	return r.Intn(max)
 }
 
+// readData pulls all the data out of the files and returns the permutation
 func readData() (permutations, error) {
-	var perms permutations
 
-	// Read colours
-	lines, err := readLines(coloursFile)
-	if err != nil {
-		return perms, err
+	perms := make(map[string][]string)
+
+	for _, asset := range AssetNames() {
+		_, file := filepath.Split(asset)
+		fileName := file[0 : len(file)-4] // Hacky, rip off .txt
+
+		data, err := readLines(asset)
+		if err != nil {
+			return perms, err
+		}
+		perms[fileName] = data
+
 	}
-	perms.colours = lines
-
+	// perms = allData
 	return perms, nil
 }
 
+// readLines returns the string slice of the specified file in data/
 func readLines(path string) ([]string, error) {
-	file, err := os.Open(path)
+	data, err := Asset(path)
 	if err != nil {
-		return nil, err
+		return []string{}, err
 	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	return lines, scanner.Err()
+	return strings.Fields(string(data)), err
 }
