@@ -43,15 +43,11 @@ bitter
 bittersweet
 black
 blanched
-blast-off
 bleu
 blizzard
 blond
 blood
 blue
-blue-gray
-blue-green
-blue-violet
 bluetiful
 blush
 bole
@@ -203,9 +199,6 @@ granite
 granny
 gray
 green
-green-blue
-green-cyan
-green-yellow
 grullo
 gunmetal
 han
@@ -322,7 +315,6 @@ navy
 neon
 new
 nickel
-non-photo
 nyanza
 ocean
 ochre
@@ -333,8 +325,6 @@ onyx
 opal
 opera
 orange
-orange-red
-orange-yellow
 orchid
 ou
 outer
