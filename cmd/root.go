@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
 	"github.com/rk295/name-generator/data"
@@ -41,14 +42,6 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&randomNumer, "random", "r", false, "Append a random 6 digit number")
 }
 
-func possibleTypes() []string {
-	var names []string
-	for _, n := range data.AssetNames() {
-		names = append(names, strings.TrimSuffix(n, dataFileSuffix))
-	}
-	return names
-}
-
 // Execute is respomnsible for executing the viper command
 func Execute() error {
 	return rootCmd.Execute()
@@ -56,6 +49,13 @@ func Execute() error {
 
 // generate is the entry point into the name generator from the root Cobra cmd
 func generate(cmd *cobra.Command, args []string) {
+
+	err := checkType(types)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	perms, err := readData(types)
 	if err != nil {
 		fmt.Println(err)
@@ -116,9 +116,36 @@ func randomNumber() int {
 	min := 100000
 	max := 999999
 	rand.Seed(time.Now().UnixNano())
-	return random(min, max)
+	return rand.Intn(max-min) + min
 }
 
-func random(min int, max int) int {
-	return rand.Intn(max-min) + min
+// containers looks for string e in slice s. Returns true if found, false if not
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+// checkTypes checks slice types against the list of known types. Returns an
+// error if the requested type is invalid
+func checkType(types []string) error {
+	allTypes := possibleTypes()
+	for _, t := range types {
+		if !contains(allTypes, t) {
+			return errors.Errorf("type %s is not valid. Possible values are: %s", t, strings.Join(allTypes, ", `"))
+		}
+	}
+	return nil
+}
+
+// possibleTypes returns a string slice of all possible data types. (ls data/*.txt)
+func possibleTypes() []string {
+	var names []string
+	for _, n := range data.AssetNames() {
+		names = append(names, strings.TrimSuffix(n, dataFileSuffix))
+	}
+	return names
 }
