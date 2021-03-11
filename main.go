@@ -11,10 +11,6 @@ import (
 
 type permutations map[string][]string
 
-const (
-	dataDir = "data"
-)
-
 func main() {
 
 	perms, err := readData()
