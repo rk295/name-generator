@@ -2,11 +2,10 @@ name-generator: main.go bindata.go
 	go build
 
 bindata.go: data/*
-	go-bindata data/
+	(cd data && go-bindata -pkg data *.txt)
 
 run: bindata.go
 	go run *.go
 
 clean:
-	rm bindata.go
-	rm name-generator
+	rm data/bindata.go name-generator 2> /dev/null || true
