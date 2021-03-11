@@ -22,9 +22,10 @@ var (
 	}
 
 	// Options
-	number    int
-	types     []string
-	separator string
+	number      int
+	types       []string
+	separator   string
+	randomNumer bool
 )
 
 const (
@@ -37,6 +38,7 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&number, "number", "n", 1, "Number of names to generate")
 	rootCmd.PersistentFlags().StringSliceVarP(&types, "types", "t", allTypes, "Types to include")
 	rootCmd.PersistentFlags().StringVarP(&separator, "separator", "s", "-", "Separator to use between words")
+	rootCmd.PersistentFlags().BoolVarP(&randomNumer, "random", "r", false, "Append a random 6 digit number")
 }
 
 func possibleTypes() []string {
@@ -75,6 +77,9 @@ func getName(perms permutations) string {
 		thing := perms[t][ran(len(perms[t]))]
 		name = append(name, thing)
 	}
+	if randomNumer {
+		name = append(name, fmt.Sprintf("%d", randomNumber()))
+	}
 	return fmt.Sprintf(strings.Join(name, separator))
 }
 
@@ -105,4 +110,15 @@ func readLines(path string) ([]string, error) {
 		return []string{}, err
 	}
 	return strings.Fields(string(data)), err
+}
+
+func randomNumber() int {
+	min := 100000
+	max := 999999
+	rand.Seed(time.Now().UnixNano())
+	return random(min, max)
+}
+
+func random(min int, max int) int {
+	return rand.Intn(max-min) + min
 }
