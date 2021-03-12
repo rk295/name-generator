@@ -18,8 +18,11 @@ jobs:
       with:
         go-version: 1.15
 
+    - name: Bindata
+      run: make bindata.go
+
     - name: Build
-      run: go build -v ./...
+      run: make
 
     - name: Test
       run: go test -v ./...
