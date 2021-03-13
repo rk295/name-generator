@@ -18,6 +18,9 @@ jobs:
       with:
         go-version: 1.15
 
+    - name: Install Bindata
+      run: go get -u github.com/go-bindata/go-bindata/...
+
     - name: Bindata
       run: make bindata.go
 
