@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
 	"github.com/rk295/name-generator/data"
 )
 
@@ -14,6 +13,11 @@ type Permutations map[string][]string
 
 const (
 	dataFileSuffix = ".txt"
+
+	// If the use wants a random number appended to the name these control the
+	// min and max of that number, i.e. it will be within this range
+	randonmNumberMin = 100000
+	randonmNumberMax = 999999
 )
 
 // checkTypes checks slice types against the list of known types. Returns an
@@ -22,7 +26,7 @@ func CheckType(types []string) error {
 	allTypes := PossibleTypes()
 	for _, t := range types {
 		if !contains(allTypes, t) {
-			return errors.Errorf("type %s is not valid. Possible values are: %s", t, strings.Join(allTypes, ", `"))
+			return fmt.Errorf("type %s is not valid. Possible values are: %s", t, strings.Join(allTypes, ", `"))
 		}
 	}
 	return nil
@@ -66,17 +70,22 @@ func contains(s []string, e string) bool {
 	return false
 }
 
+// Initialise the rand package
+func newRand() *rand.Rand {
+	rand.Seed(time.Now().UnixNano())
+	return rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
+}
+
 // ran picks a random positive int from 0 to max
 func ran(max int) int {
-	r := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
+	r := newRand()
 	return r.Intn(max)
 }
 
+// randomNumber returns a random 6 digit int
 func randomNumber() int {
-	min := 100000
-	max := 999999
-	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(max-min) + min
+	r := newRand()
+	return r.Intn(randonmNumberMax-randonmNumberMin) + randonmNumberMin
 }
 
 // readData reads in the data for the types requested (eg: colour,dog,etc.)
