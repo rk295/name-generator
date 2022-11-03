@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/rk295/name-generator/lib"
+	generator "github.com/rk295/name-generator/lib"
 )
 
 var (
@@ -24,7 +24,11 @@ var (
 )
 
 func init() {
-	allTypes := lib.PossibleTypes()
+	allTypes, err := generator.PossibleTypes()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	rootCmd.PersistentFlags().IntVarP(&number, "number", "n", 1, "Number of names to generate")
 	rootCmd.PersistentFlags().StringSliceVarP(&types, "types", "t", allTypes, "Types to include")
@@ -40,7 +44,7 @@ func Execute() error {
 // generate is the entry point into the name generator from the root Cobra cmd
 func generate(cmd *cobra.Command, args []string) {
 
-	err := lib.CheckType(types)
+	err := generator.CheckType(types)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -49,7 +53,7 @@ func generate(cmd *cobra.Command, args []string) {
 	// Generate the number of names we were asked for
 	n := 1
 	for n <= number {
-		name, err := lib.GetName(types, separator, randomNumer)
+		name, err := generator.GetName(types, separator, randomNumer)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

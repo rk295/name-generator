@@ -1,17 +1,18 @@
 package lib
 
 import (
+	"embed"
 	"fmt"
 	"math/rand"
+	"path"
 	"strings"
 	"time"
-
-	"github.com/rk295/name-generator/data"
 )
 
 type Permutations map[string][]string
 
 const (
+	dataDirName    = "data"
 	dataFileSuffix = ".txt"
 
 	// If the use wants a random number appended to the name these control the
@@ -20,10 +21,16 @@ const (
 	randonmNumberMax = 999999
 )
 
+//go:embed data/*.txt
+var nameList embed.FS
+
 // checkTypes checks slice types against the list of known types. Returns an
 // error if the requested type is invalid
 func CheckType(types []string) error {
-	allTypes := PossibleTypes()
+	allTypes, err := PossibleTypes()
+	if err != nil {
+		return err
+	}
 	for _, t := range types {
 		if !contains(allTypes, t) {
 			return fmt.Errorf("type %s is not valid. Possible values are: %s", t, strings.Join(allTypes, ", `"))
@@ -52,12 +59,18 @@ func GetName(types []string, separator string, randomNumer bool) (string, error)
 }
 
 // PossibleTypes returns a string slice of all possible data types. (ls data/*.txt)
-func PossibleTypes() []string {
+func PossibleTypes() ([]string, error) {
 	var names []string
-	for _, n := range data.AssetNames() {
-		names = append(names, strings.TrimSuffix(n, dataFileSuffix))
+
+	files, err := nameList.ReadDir(dataDirName)
+	if err != nil {
+		return names, err
 	}
-	return names
+
+	for _, n := range files {
+		names = append(names, strings.TrimSuffix(n.Name(), dataFileSuffix))
+	}
+	return names, nil
 }
 
 // containers looks for string e in slice s. Returns true if found, false if not
@@ -103,8 +116,8 @@ func readData(types []string) (Permutations, error) {
 }
 
 // readLines returns the string slice of the specified file in data/
-func readLines(path string) ([]string, error) {
-	data, err := data.Asset(path)
+func readLines(name string) ([]string, error) {
+	data, err := nameList.ReadFile(path.Join(dataDirName, name))
 	if err != nil {
 		return []string{}, err
 	}
