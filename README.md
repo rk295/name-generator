@@ -23,4 +23,4 @@ Flags:
 
 ## Adding more words
 
-Drop a file in `lib/data` , format is one per line, file must end with `.txt`.
+Drop a file in [`lib/data`](lib/data) , format is one per line, file must end with `.txt`.
