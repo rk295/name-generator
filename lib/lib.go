@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"bufio"
 	"embed"
 	"fmt"
 	"math/rand"
@@ -49,7 +50,7 @@ func GetName(types []string, separator string, randomNumer bool) (string, error)
 
 	var name []string
 	for _, t := range types {
-		thing := perms[t][ran(len(perms[t]))]
+		thing := strings.Replace(perms[t][ran(len(perms[t]))], " ", separator, -1)
 		name = append(name, thing)
 	}
 	if randomNumer {
@@ -117,9 +118,16 @@ func readData(types []string) (Permutations, error) {
 
 // readLines returns the string slice of the specified file in data/
 func readLines(name string) ([]string, error) {
-	data, err := nameList.ReadFile(path.Join(dataDirName, name))
+	lines := make([]string, 0)
+	f, err := nameList.Open(path.Join(dataDirName, name))
 	if err != nil {
 		return []string{}, err
 	}
-	return strings.Fields(string(data)), err
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
 }
