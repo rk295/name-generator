@@ -23,4 +23,4 @@ Flags:
 
 ## Adding more words
 
-Drop a file in `data` , format is one per line, file must end with `.txt` , run make to rebuild the binary with the new data file.
+Drop a file in `lib/data` , format is one per line, file must end with `.txt`.
