@@ -118,7 +118,7 @@ moon-knight
 moondragon
 moonstar
 morph
-mr.-fantastic
+mr-fantastic
 namor
 namorita
 nick-fury
