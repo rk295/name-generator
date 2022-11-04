@@ -48,7 +48,7 @@ func GetName(types []string, separator string, randomNumer bool) (string, error)
 	}
 
 	var name []string
-	for t := range perms {
+	for _, t := range types {
 		thing := perms[t][ran(len(perms[t]))]
 		name = append(name, thing)
 	}
