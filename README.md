@@ -2,7 +2,7 @@
 
 The Yak was shaved. 
 
-Build with `make` . 
+Build with `make`. 
 
 It has some options:
 
@@ -18,7 +18,7 @@ Flags:
   -n, --number int         Number of names to generate (default 1)
   -r, --random             Append a random 6 digit number
   -s, --separator string   Separator to use between words (default "-")
-  -t, --types strings      Types to include (default [colours,dogs,metals,trees,gladiators,greek])
+  -t, --types strings      Types to include (default [colours,dogs])
 ```
 
 ## Adding more words
