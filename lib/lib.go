@@ -34,7 +34,7 @@ func CheckType(types []string) error {
 	}
 	for _, t := range types {
 		if !contains(allTypes, t) {
-			return fmt.Errorf("type %s is not valid. Possible values are: %s", t, strings.Join(allTypes, ", `"))
+			return fmt.Errorf("type %s is not valid. Possible values are: `%s`", t, strings.Join(allTypes, "`, `"))
 		}
 	}
 	return nil
