@@ -8,8 +8,6 @@ import (
 	"path"
 	"strings"
 	"time"
-
-	"golang.org/x/exp/slices"
 )
 
 type Permutations map[string][]string
@@ -25,9 +23,9 @@ const (
 )
 
 var (
-	aliases = map[string][]string{
-		"trees": {"tree"},
-		"dogs":  {"dog"},
+	aliases = map[string]string{
+		"tree": "trees",
+		"dog":  "dogs",
 	}
 )
 
@@ -149,23 +147,13 @@ func readLines(name string) ([]string, error) {
 // unAlias takes a list of types which may include aliases, and returns a list
 // with any aliases replaced with their real names. eg: input [tree] returns [trees]
 func unAlias(types []string) []string {
+	unAliesed := make([]string, 0, len(types))
 	for _, t := range types {
-		realType := checkAlias(t)
-		if realType != "" {
-			idx := slices.IndexFunc(types, func(a string) bool { return a == t })
-			types[idx] = realType
+		if real, found := aliases[t]; found {
+			unAliesed = append(unAliesed, real)
+		} else {
+			unAliesed = append(unAliesed, t)
 		}
 	}
-	return types
-}
-
-// checkAlias checks the given type against the list of aliases, returning
-// the real name if an alias is found
-func checkAlias(t string) string {
-	for d, a := range aliases {
-		if contains(a, t) {
-			return d
-		}
-	}
-	return ""
+	return unAliesed
 }
