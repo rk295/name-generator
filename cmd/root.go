@@ -44,11 +44,12 @@ func Execute() error {
 // generate is the entry point into the name generator from the root Cobra cmd
 func generate(cmd *cobra.Command, args []string) {
 
-	err := generator.CheckType(types)
-	if err != nil {
+	fmt.Println(types)
+	if err := generator.CheckType(types); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	fmt.Println(types)
 
 	// Generate the number of names we were asked for
 	n := 1
