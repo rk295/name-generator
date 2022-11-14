@@ -22,6 +22,13 @@ const (
 	randonmNumberMax = 999999
 )
 
+var (
+	aliases = map[string]string{
+		"tree": "trees",
+		"dog":  "dogs",
+	}
+)
+
 //go:embed data/*.txt
 var nameList embed.FS
 
@@ -32,6 +39,9 @@ func CheckType(types []string) error {
 	if err != nil {
 		return err
 	}
+
+	types = unAlias(types)
+
 	for _, t := range types {
 		if !contains(allTypes, t) {
 			return fmt.Errorf("type `%s` is not valid. Possible values are: `%s`", t, strings.Join(allTypes, "`, `"))
@@ -42,6 +52,8 @@ func CheckType(types []string) error {
 
 // get an actual name from the list of permuations
 func GetName(types []string, separator string, randomNumer bool) (string, error) {
+
+	types = unAlias(types)
 
 	perms, err := readData(types)
 	if err != nil {
@@ -74,7 +86,7 @@ func PossibleTypes() ([]string, error) {
 	return names, nil
 }
 
-// containers looks for string e in slice s. Returns true if found, false if not
+// contains looks for string e in slice s. Returns true if found, false if not
 func contains(s []string, e string) bool {
 	for _, a := range s {
 		if a == e {
@@ -130,4 +142,18 @@ func readLines(name string) ([]string, error) {
 		lines = append(lines, scanner.Text())
 	}
 	return lines, scanner.Err()
+}
+
+// unAlias takes a list of types which may include aliases, and returns a list
+// with any aliases replaced with their real names. eg: input [tree] returns [trees]
+func unAlias(types []string) []string {
+	unAliesed := make([]string, 0, len(types))
+	for _, t := range types {
+		if real, found := aliases[t]; found {
+			unAliesed = append(unAliesed, real)
+		} else {
+			unAliesed = append(unAliesed, t)
+		}
+	}
+	return unAliesed
 }
