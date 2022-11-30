@@ -16,10 +16,10 @@ const (
 	dataDirName    = "data"
 	dataFileSuffix = ".txt"
 
-	// If the use wants a random number appended to the name these control the
+	// If the user wants a random number appended to the name, these control the
 	// min and max of that number, i.e. it will be within this range
-	randonmNumberMin = 100000
-	randonmNumberMax = 999999
+	randomNumberMin = 100000
+	randomNumberMax = 999999
 )
 
 var (
@@ -32,7 +32,7 @@ var (
 //go:embed data/*.txt
 var nameList embed.FS
 
-// checkTypes checks slice types against the list of known types. Returns an
+// CheckType checks slice types against the list of known types. Returns an
 // error if the requested type is invalid
 func CheckType(types []string) error {
 	allTypes, err := PossibleTypes()
@@ -50,8 +50,8 @@ func CheckType(types []string) error {
 	return nil
 }
 
-// get an actual name from the list of permuations
-func GetName(types []string, separator string, randomNumer bool) (string, error) {
+// GetName gets an actual name from the list of permutations
+func GetName(types []string, separator string, appendRandomNumber bool) (string, error) {
 
 	types = unAlias(types)
 
@@ -65,7 +65,7 @@ func GetName(types []string, separator string, randomNumer bool) (string, error)
 		thing := strings.Replace(perms[t][ran(len(perms[t]))], " ", separator, -1)
 		name = append(name, thing)
 	}
-	if randomNumer {
+	if appendRandomNumber {
 		name = append(name, fmt.Sprintf("%d", randomNumber()))
 	}
 	return strings.Join(name, separator), nil
@@ -96,7 +96,7 @@ func contains(s []string, e string) bool {
 	return false
 }
 
-// Initialise the rand package
+// newRand initialises the rand package
 func newRand() *rand.Rand {
 	rand.Seed(time.Now().UnixNano())
 	return rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
@@ -111,7 +111,7 @@ func ran(max int) int {
 // randomNumber returns a random 6 digit int
 func randomNumber() int {
 	r := newRand()
-	return r.Intn(randonmNumberMax-randonmNumberMin) + randonmNumberMin
+	return r.Intn(randomNumberMax-randomNumberMin) + randomNumberMin
 }
 
 // readData reads in the data for the types requested (eg: colour,dog,etc.)
@@ -147,13 +147,13 @@ func readLines(name string) ([]string, error) {
 // unAlias takes a list of types which may include aliases, and returns a list
 // with any aliases replaced with their real names. eg: input [tree] returns [trees]
 func unAlias(types []string) []string {
-	unAliesed := make([]string, 0, len(types))
+	unAliased := make([]string, 0, len(types))
 	for _, t := range types {
 		if real, found := aliases[t]; found {
-			unAliesed = append(unAliesed, real)
+			unAliased = append(unAliased, real)
 		} else {
-			unAliesed = append(unAliesed, t)
+			unAliased = append(unAliased, t)
 		}
 	}
-	return unAliesed
+	return unAliased
 }
