@@ -1,8 +1,10 @@
 # Random name generator
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/rk295/name-generator.svg)](https://pkg.go.dev/github.com/rk295/name-generator)
+
 The Yak was shaved. 
 
-Build with `make`. 
+Build with `make` . 
 
 It has some options:
 
@@ -23,4 +25,4 @@ Flags:
 
 ## Adding more words
 
-Drop a file in [`lib/data`](lib/data) , format is one per line, file must end with `.txt`.
+Drop a file in [ `lib/data` ](lib/data) , format is one per line, file must end with `.txt` .
