@@ -26,3 +26,11 @@ Flags:
 ## Adding more words
 
 Drop a file in [ `lib/data` ](lib/data) , format is one per line, file must end with `.txt` .
+
+## Yak shaver hall of shame
+
+<a href="https://github.com/rk295/name-generator/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=rk295/name-generator" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
